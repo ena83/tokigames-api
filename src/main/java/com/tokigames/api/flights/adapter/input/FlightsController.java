@@ -1,10 +1,12 @@
 package com.tokigames.api.flights.adapter.input;
 
-import com.tokigames.api.flights.application.FlightsService;
 import com.tokigames.api.flights.domain.Flight;
+import com.tokigames.api.flights.port.FlightProviderDataPort;
 import lombok.AllArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -12,10 +14,10 @@ import java.util.List;
 @AllArgsConstructor
 public class FlightsController {
 
-    private FlightsService flightsService;
+    private FlightProviderDataPort flightProviderDataPort;
 
-    @GetMapping("/flights")
-    public List<Flight> findFlights() {
-        return flightsService.findFlights();
+    @GetMapping(value = "/flights", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Mono<List<Flight>> findFlights() {
+        return flightProviderDataPort.getAllCheapFlights();
     }
 }

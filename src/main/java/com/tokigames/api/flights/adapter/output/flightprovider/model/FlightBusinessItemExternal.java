@@ -1,9 +1,9 @@
-package com.tokigames.api.flights.infrastructure;
+package com.tokigames.api.flights.adapter.output.flightprovider.model;
 
 import lombok.Data;
 
 @Data
-public class FlightExternalItem {
+public class FlightBusinessItemExternal {
     private String departure;
 
     private String arrival;
