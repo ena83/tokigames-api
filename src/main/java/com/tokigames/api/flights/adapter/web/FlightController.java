@@ -23,7 +23,7 @@ public class FlightController {
     @GetMapping(value = "/flights", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<Flight> getFlights(
             @RequestParam(name = "city", required = false) String city,
-            @RequestParam(name = "sortBy", required = false) SortBy sortBy,
+            @RequestParam(name = "sortBy") SortBy sortBy,
             @RequestParam(name = "page", defaultValue = FIRST_PAGE_NUM) int page,
             @RequestParam(name = "size", defaultValue = DEFAULT_PAGE_SIZE) int size) {
         return flightSearchService.getFlights(city, sortBy, PageRequest.of(page, size));
