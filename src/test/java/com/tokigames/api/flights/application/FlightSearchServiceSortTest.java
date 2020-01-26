@@ -48,7 +48,12 @@ class FlightSearchServiceSortTest {
                 LocalDateTime.of(2020, 01, 12, 1, 00),
                 LocalDateTime.of(2020, 01, 12, 3, 00),
                 FlightType.CHEAP);
-        when(flightRepositoryPort.getAllFlights()).thenReturn(Sets.newSet(flight1, flight2, flight3));
+        Flight flight4 = new Flight("Paris",
+                "Singapore",
+                LocalDateTime.of(2020, 01, 22, 1, 00),
+                LocalDateTime.of(2020, 01, 22, 3, 00),
+                FlightType.CHEAP);
+        when(flightRepositoryPort.getAllFlights()).thenReturn(Sets.newSet(flight1, flight2, flight3, flight4));
     }
 
     @Test
@@ -59,15 +64,17 @@ class FlightSearchServiceSortTest {
                 PageRequest.of(0, 20))).collectList().block();
 
         //then
-        assertThat(flightFound.size(), is(3));
+        assertThat(flightFound.size(), is(4));
 
         Flight flight1 = flightFound.get(0);
         Flight flight2 = flightFound.get(1);
         Flight flight3 = flightFound.get(2);
+        Flight flight4 = flightFound.get(3);
 
         assertThat(flight1.getDeparture(), is("Antalya"));
         assertThat(flight2.getDeparture(), is("Paris"));
-        assertThat(flight3.getDeparture(), is("Singapore"));
+        assertThat(flight3.getDeparture(), is("Paris"));
+        assertThat(flight4.getDeparture(), is("Singapore"));
     }
 
     @Test
@@ -78,14 +85,38 @@ class FlightSearchServiceSortTest {
                 PageRequest.of(0, 20))).collectList().block();
 
         //then
-        assertThat(flightFound.size(), is(3));
+        assertThat(flightFound.size(), is(4));
 
         Flight flight1 = flightFound.get(0);
         Flight flight2 = flightFound.get(1);
         Flight flight3 = flightFound.get(2);
+        Flight flight4 = flightFound.get(3);
 
         assertThat(flight1.getArrival(), is("Istanbul"));
         assertThat(flight2.getArrival(), is("Paris"));
         assertThat(flight3.getArrival(), is("Singapore"));
+        assertThat(flight4.getArrival(), is("Singapore"));
+    }
+
+    @Test
+    void shouldSortFlightListByDepartureAndTimeCity() {
+        //when
+        List<Flight> flightFound = Flux.concat(flightSearchService.getFlights("",
+                SortBy.DEPARTURE_CITY_AND_TIME,
+                PageRequest.of(0, 20))).collectList().block();
+
+        //then
+        assertThat(flightFound.size(), is(4));
+
+        Flight flight1 = flightFound.get(0);
+        Flight flight2 = flightFound.get(1);
+        Flight flight3 = flightFound.get(2);
+        Flight flight4 = flightFound.get(3);
+
+        assertThat(flight1.getDeparture(), is("Antalya"));
+        assertThat(flight2.getDeparture(), is("Paris"));
+        assertThat(flight3.getDeparture(), is("Paris"));
+        assertThat(flight4.getDeparture(), is("Singapore"));
+
     }
 }

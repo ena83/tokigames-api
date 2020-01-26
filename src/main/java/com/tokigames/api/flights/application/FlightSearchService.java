@@ -23,19 +23,15 @@ public class FlightSearchService {
      * Performance will be better if it can be filtered,sorted and paged in Repository layer (which is not implemented at the moment).
      */
     public Flux<Flight> getFlights(String city, SortBy sortBy, Pageable page) {
-        List<Flight> filteredFlights = getFilteredFlight(city, page);
-        if (sortBy == null) {
-            sortBy = SortBy.DEPARTURE_CITY;
-        }
-        filteredFlights.sort(sortBy.getComparator());
-        return Flux.fromIterable(filteredFlights);
+        return Flux.fromIterable(getFilteredAndSortedFlights(city, sortBy, page));
     }
 
-    private List<Flight> getFilteredFlight(String city, Pageable page) {
-        return flightRepositoryPort.getAllFlights()
+    private List<Flight> getFilteredAndSortedFlights(String city, SortBy sortBy, Pageable page) {
+        return (List<Flight>) flightRepositoryPort.getAllFlights()
                 .stream()
                 .filter(flight -> filterByCity(city, flight))
                 .skip(page.getPageNumber() * page.getPageSize())
+                .sorted(sortBy.getComparator())
                 .limit(page.getPageSize())
                 .collect(Collectors.toList());
     }
