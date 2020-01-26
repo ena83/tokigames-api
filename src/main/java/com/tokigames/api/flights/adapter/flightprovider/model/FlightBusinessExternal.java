@@ -1,4 +1,4 @@
-package com.tokigames.api.flights.adapter.output.flightprovider.model;
+package com.tokigames.api.flights.adapter.flightprovider.model;
 
 import lombok.Data;
 

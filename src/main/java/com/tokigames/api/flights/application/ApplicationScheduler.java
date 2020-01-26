@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component;
 public class ApplicationScheduler {
 
     @Autowired
-    private FlightsDataUpdateService flightsDataUpdateService;
+    private FlightDataUpdateService flightDataUpdateService;
 
     @Scheduled(fixedDelay = 10000L)
     public void updateAllFlights() {
-        flightsDataUpdateService.updateFlightData();
+        flightDataUpdateService.updateFlightData();
     }
 }

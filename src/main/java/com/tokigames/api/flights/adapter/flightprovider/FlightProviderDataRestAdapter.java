@@ -1,23 +1,25 @@
-package com.tokigames.api.flights.adapter.output.flightprovider;
+package com.tokigames.api.flights.adapter.flightprovider;
 
-import com.tokigames.api.flights.adapter.output.flightprovider.model.FlightBusinessExternal;
-import com.tokigames.api.flights.adapter.output.flightprovider.model.FlightCheapExternal;
+import com.tokigames.api.flights.adapter.flightprovider.model.FlightBusinessExternal;
+import com.tokigames.api.flights.adapter.flightprovider.model.FlightCheapExternal;
 import com.tokigames.api.flights.domain.Flight;
 import com.tokigames.api.flights.port.FlightProviderDataPort;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
 
-@Component
+@Service
 public class FlightProviderDataRestAdapter implements FlightProviderDataPort {
 
     private final WebClient tokigamesFlightWebClient;
 
-    public FlightProviderDataRestAdapter() {
-        tokigamesFlightWebClient = WebClient.create("https://tokigames-challenge.herokuapp.com/api/flights");
+    public FlightProviderDataRestAdapter(@Value("${tokigames.flightprovider.api.url}")
+                                                 String tokigamesUrl) {
+        tokigamesFlightWebClient = WebClient.create(tokigamesUrl);
     }
 
     @Override
@@ -28,7 +30,7 @@ public class FlightProviderDataRestAdapter implements FlightProviderDataPort {
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToMono(FlightCheapExternal.class)
-                .map(flightCheapExternal -> Flight.toFlightsFromFlightCheapExternal(flightCheapExternal.getData()));
+                .map(flightCheapExternal -> FlightExternalToFlightMapper.toFlightsFromFlightCheapExternal(flightCheapExternal.getData()));
     }
 
     @Override
@@ -39,6 +41,6 @@ public class FlightProviderDataRestAdapter implements FlightProviderDataPort {
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToMono(FlightBusinessExternal.class)
-                .map(flightBusinessExternal -> Flight.toFlightsFromFlightBusinessExternal(flightBusinessExternal.getData()));
+                .map(flightBusinessExternal -> FlightExternalToFlightMapper.toFlightsFromFlightBusinessExternal(flightBusinessExternal.getData()));
     }
 }
