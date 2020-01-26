@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class FlightDataUpdateService {
 
-    private FlightProviderDataPort flightProviderDataPort;
+    private final FlightProviderDataPort flightProviderDataPort;
 
-    private FlightRepositoryPort flightRepositoryPort;
+    private final FlightRepositoryPort flightRepositoryPort;
 
     public void updateFlightData() {
 

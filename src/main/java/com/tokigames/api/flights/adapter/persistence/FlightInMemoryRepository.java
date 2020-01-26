@@ -13,7 +13,7 @@ import java.util.Set;
 @Repository
 public class FlightInMemoryRepository implements FlightRepositoryPort {
 
-    private Set<Flight> FLIGHTS_IN_MEMORY = new HashSet<>();
+    private static Set<Flight> FLIGHTS_IN_MEMORY = new HashSet<>();
 
     @Override
     public void saveFlights(List<Flight> flights) {

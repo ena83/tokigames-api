@@ -10,7 +10,7 @@ public class ApplicationScheduler {
     @Autowired
     private FlightDataUpdateService flightDataUpdateService;
 
-    @Scheduled(fixedDelay = 10000L)
+    @Scheduled(fixedDelay = 30000L)
     public void updateAllFlights() {
         flightDataUpdateService.updateFlightData();
     }

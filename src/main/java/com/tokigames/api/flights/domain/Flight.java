@@ -17,4 +17,8 @@ public class Flight {
     private LocalDateTime arrivalTime;
 
     private FlightType type;
+
+    public boolean isLandedInThisCity(String city) {
+        return this.getDeparture().contains(city) || this.getArrival().contains(city);
+    }
 }
