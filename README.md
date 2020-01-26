@@ -11,11 +11,11 @@ Tokigames API coding test
 
 Packaging structure of this project is based domain/business function followed by package structure following Hexagonal Architecture
 
-* `com.tokigames.api.flights` (Business function/domain)
-* `com.tokigames.api.flights.adapter` (Adapter layer for which application need to communicate with, it translate whatever comes from delivery mechanism into method call in the `application`)
-* `com.tokigames.api.flights.application` (Application layer for specific service/)
-* `com.tokigames.api.flights.domain` (Business domain logic should be reside here)
-* `com.tokigames.api.flights.port` (Port layer (interfaces) that need to be implemented by adapters)
+* `com.tokigames.api.flights` (Business function/domain).
+* `com.tokigames.api.flights.adapter` (Adapter layer for which application need to communicate with, it translate whatever comes from delivery mechanism into method call in the `application`).
+* `com.tokigames.api.flights.application` (Application layer to collaborate services and domain objects).
+* `com.tokigames.api.flights.domain` (Business domain logic should be reside here).
+* `com.tokigames.api.flights.port` (Port layer (interfaces) that need to be implemented by adapters).
 
   
 ### Command to start the project
