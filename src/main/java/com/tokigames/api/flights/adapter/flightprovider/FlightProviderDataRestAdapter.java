@@ -47,7 +47,7 @@ public class FlightProviderDataRestAdapter implements FlightProviderDataPort {
 
     @Override
     public Flux<Flight> getAllFlights() {
-        return getAllCheapFlights().flatMapMany(Flux::fromIterable)
-                .mergeWith(getAllBusinessFlights().flatMapMany(Flux::fromIterable));
+        return getAllCheapFlights().onErrorReturn(List.of()).flatMapMany(Flux::fromIterable)
+                .mergeWith(getAllBusinessFlights().onErrorReturn(List.of()).flatMapMany(Flux::fromIterable));
     }
 }

@@ -21,9 +21,8 @@ public class FlightSearchService {
         return getFilteredAndSortedFlights(city, sortBy, page);
     }
 
-    private Flux<Flight> getFilteredAndSortedFlights(String city, SortBy sortBy, Pageable page) {
-        Flux<Flight> flightFlux = flightProviderDataPort.getAllFlights();
-        return flightFlux
+    private Flux getFilteredAndSortedFlights(String city, SortBy sortBy, Pageable page) {
+        return flightProviderDataPort.getAllFlights()
                 .filter(flight -> filterByCity(city, flight))
                 .sort(sortBy.getComparator())
                 .skip(page.getPageNumber() * page.getPageSize())

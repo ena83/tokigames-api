@@ -45,7 +45,7 @@ class FlightProviderDataRestAdapterTest {
     }
 
     @Test
-    void getAllCheapFlights() throws InterruptedException {
+    void shouldReturnAllCheapFlights() throws InterruptedException {
         //given
         MockResponse cheapFlightMockResponse = cheapFlightsMockResponse();
         mockWebServer.enqueue(cheapFlightMockResponse);
@@ -85,7 +85,7 @@ class FlightProviderDataRestAdapterTest {
 
 
     @Test
-    void getAllBusinessFlights() throws InterruptedException {
+    void shouldReturnAllBusinessFlights() throws InterruptedException {
 
         //given
         MockResponse businessFlightMockResponse = businessFlightMockResponse();
@@ -125,7 +125,7 @@ class FlightProviderDataRestAdapterTest {
     }
 
     @Test
-    void getAllFlights() throws InterruptedException {
+    void shouldReturnAllFlights() throws InterruptedException {
 
         //given
         MockResponse cheapFlightMockResponse = cheapFlightsMockResponse();
@@ -141,6 +141,44 @@ class FlightProviderDataRestAdapterTest {
 
         //then
         assertThat(allFlights.size(), is(4));
+    }
+
+    @Test
+    void shouldReturnOnlyCheapFlights_BusinessFlightsError() throws InterruptedException {
+
+        //given
+        MockResponse cheapFlightMockResponse = cheapFlightsMockResponse();
+        MockResponse flightMockErrorResponse = flightMockErrorResponse();
+
+        mockWebServer.enqueue(cheapFlightMockResponse);
+        mockWebServer.enqueue(flightMockErrorResponse);
+
+        //when
+        List<Flight> allFlights = flightProviderDataRestAdapter.getAllFlights().collectList().block();
+
+        mockWebServer.takeRequest();
+
+        //then
+        assertThat(allFlights.size(), is(2));
+    }
+
+    @Test
+    void shouldReturnOnlyBusinessFlights_CheapFlightsError() throws InterruptedException {
+
+        //given
+        MockResponse flightMockErrorResponse = flightMockErrorResponse();
+        MockResponse businessFlightsMockResponse = businessFlightMockResponse();
+
+        mockWebServer.enqueue(flightMockErrorResponse);
+        mockWebServer.enqueue(businessFlightsMockResponse);
+
+        //when
+        List<Flight> allFlights = flightProviderDataRestAdapter.getAllFlights().collectList().block();
+
+        mockWebServer.takeRequest();
+
+        //then
+        assertThat(allFlights.size(), is(2));
     }
 
     private MockResponse cheapFlightsMockResponse() {
@@ -182,4 +220,11 @@ class FlightProviderDataRestAdapterTest {
                         "        }]" +
                         "}");
     }
+
+    private MockResponse flightMockErrorResponse() {
+        return new MockResponse()
+                .setResponseCode(500)
+                .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+    }
+
 }

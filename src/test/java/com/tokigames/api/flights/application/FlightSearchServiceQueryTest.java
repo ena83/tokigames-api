@@ -4,7 +4,6 @@ import com.tokigames.api.flights.domain.Flight;
 import com.tokigames.api.flights.domain.FlightType;
 import com.tokigames.api.flights.domain.SortBy;
 import com.tokigames.api.flights.port.FlightProviderDataPort;
-import com.tokigames.api.flights.port.FlightRepositoryPort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
