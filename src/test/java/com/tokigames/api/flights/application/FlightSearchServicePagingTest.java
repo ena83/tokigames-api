@@ -6,8 +6,6 @@ import com.tokigames.api.flights.domain.FlightType;
 import com.tokigames.api.flights.domain.SortBy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 import reactor.core.publisher.Flux;
 
@@ -17,7 +15,6 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-@ExtendWith(MockitoExtension.class)
 class FlightSearchServicePagingTest {
 
     private FlightInMemoryRepository flightInMemoryRepository = new FlightInMemoryRepository();
