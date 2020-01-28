@@ -47,22 +47,7 @@ class FlightProviderDataRestAdapterTest {
     @Test
     void getAllCheapFlights() throws InterruptedException {
         //given
-        MockResponse cheapFlightMockResponse = new MockResponse()
-                .setResponseCode(200)
-                .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .setBody("{\n" +
-                        "    \"data\": [\n" +
-                        "        {\n" +
-                        "            \"route\": \"Cruz del Eje-Antalya\",\n" +
-                        "            \"departure\": 1558902656,\n" +
-                        "            \"arrival\": 1558902656\n" +
-                        "        },\n" +
-                        "        {\n" +
-                        "            \"route\": \"Cruz del Eje-Tizi\",\n" +
-                        "            \"departure\": 1558902656,\n" +
-                        "            \"arrival\": 1558902656\n" +
-                        "        }]" +
-                        "}");
+        MockResponse cheapFlightMockResponse = cheapFlightsMockResponse();
         mockWebServer.enqueue(cheapFlightMockResponse);
 
         //when
@@ -103,24 +88,7 @@ class FlightProviderDataRestAdapterTest {
     void getAllBusinessFlights() throws InterruptedException {
 
         //given
-        MockResponse businessFlightMockResponse = new MockResponse()
-                .setResponseCode(200)
-                .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .setBody("{\n" +
-                        "    \"data\": [\n" +
-                        "        {\n" +
-                        "            \"departure\": \"Ankara\",\n" +
-                        "            \"arrival\": \"Antalya\",\n" +
-                        "            \"departureTime\": 1561627856,\n" +
-                        "            \"arrivalTime\": 1564410656\n" +
-                        "        },\n" +
-                        "        {\n" +
-                        "            \"departure\": \"Cruz del Eje\",\n" +
-                        "            \"arrival\": \"Tizi\",\n" +
-                        "            \"departureTime\": 1558902656,\n" +
-                        "            \"arrivalTime\": 1558902656\n" +
-                        "        }]" +
-                        "}");
+        MockResponse businessFlightMockResponse = businessFlightMockResponse();
         mockWebServer.enqueue(businessFlightMockResponse);
 
         //when
@@ -154,5 +122,64 @@ class FlightProviderDataRestAdapterTest {
         assertThat("Flight item 2 departure time(minute) does not map as expected",
                 cheapFlight2.getDepartureTime().atZone(ZoneId.of("UTC")).getMinute(),
                 is((01)));
+    }
+
+    @Test
+    void getAllFlights() throws InterruptedException {
+
+        //given
+        MockResponse cheapFlightMockResponse = cheapFlightsMockResponse();
+        MockResponse businessFlightMockResponse = businessFlightMockResponse();
+
+        mockWebServer.enqueue(cheapFlightMockResponse);
+        mockWebServer.enqueue(businessFlightMockResponse);
+
+        //when
+        List<Flight> allFlights = flightProviderDataRestAdapter.getAllFlights().collectList().block();
+
+        mockWebServer.takeRequest();
+
+        //then
+        assertThat(allFlights.size(), is(4));
+    }
+
+    private MockResponse cheapFlightsMockResponse() {
+        return new MockResponse()
+                .setResponseCode(200)
+                .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .setBody("{\n" +
+                        "    \"data\": [\n" +
+                        "        {\n" +
+                        "            \"route\": \"Cruz del Eje-Antalya\",\n" +
+                        "            \"departure\": 1558902656,\n" +
+                        "            \"arrival\": 1558902656\n" +
+                        "        },\n" +
+                        "        {\n" +
+                        "            \"route\": \"Cruz del Eje-Tizi\",\n" +
+                        "            \"departure\": 1558902656,\n" +
+                        "            \"arrival\": 1558902656\n" +
+                        "        }]" +
+                        "}");
+    }
+
+    private MockResponse businessFlightMockResponse() {
+        return new MockResponse()
+                .setResponseCode(200)
+                .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .setBody("{\n" +
+                        "    \"data\": [\n" +
+                        "        {\n" +
+                        "            \"departure\": \"Ankara\",\n" +
+                        "            \"arrival\": \"Antalya\",\n" +
+                        "            \"departureTime\": 1561627856,\n" +
+                        "            \"arrivalTime\": 1564410656\n" +
+                        "        },\n" +
+                        "        {\n" +
+                        "            \"departure\": \"Cruz del Eje\",\n" +
+                        "            \"arrival\": \"Tizi\",\n" +
+                        "            \"departureTime\": 1558902656,\n" +
+                        "            \"arrivalTime\": 1558902656\n" +
+                        "        }]" +
+                        "}");
     }
 }

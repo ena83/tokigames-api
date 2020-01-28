@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -42,5 +43,11 @@ public class FlightProviderDataRestAdapter implements FlightProviderDataPort {
                 .retrieve()
                 .bodyToMono(FlightBusinessExternal.class)
                 .map(flightBusinessExternal -> FlightExternalToFlightMapper.toFlightsFromFlightBusinessExternal(flightBusinessExternal.getData()));
+    }
+
+    @Override
+    public Flux<Flight> getAllFlights() {
+        return getAllCheapFlights().flatMapMany(Flux::fromIterable)
+                .mergeWith(getAllBusinessFlights().flatMapMany(Flux::fromIterable));
     }
 }
