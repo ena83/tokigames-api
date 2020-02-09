@@ -3,7 +3,7 @@ package com.tokigames.api.flights.application;
 import com.tokigames.api.flights.domain.Flight;
 import com.tokigames.api.flights.domain.FlightType;
 import com.tokigames.api.flights.domain.SortBy;
-import com.tokigames.api.flights.port.FlightRepositoryPort;
+import com.tokigames.api.flights.port.FlightProviderDataPort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 class FlightSearchServiceQueryTest {
 
     @Mock
-    private FlightRepositoryPort flightRepositoryPort;
+    private FlightProviderDataPort flightProviderDataPort;
 
     @InjectMocks
     private FlightSearchService flightSearchService;
@@ -48,7 +48,7 @@ class FlightSearchServiceQueryTest {
                 LocalDateTime.of(2020, 01, 12, 1, 00),
                 LocalDateTime.of(2020, 01, 12, 3, 00),
                 FlightType.CHEAP);
-        when(flightRepositoryPort.getAllFlights()).thenReturn(Sets.newSet(flight1, flight2, flight3));
+        when(flightProviderDataPort.getAllFlights()).thenReturn(Flux.fromIterable(Sets.newSet(flight1, flight2, flight3)));
     }
 
     @Test

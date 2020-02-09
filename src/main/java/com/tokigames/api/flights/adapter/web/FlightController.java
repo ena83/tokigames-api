@@ -20,7 +20,7 @@ public class FlightController {
 
     private final FlightSearchService flightSearchService;
 
-    @GetMapping(value = "/flights", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @GetMapping(value = "/flights", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
     public Flux<Flight> getFlights(
             @RequestParam(name = "city", required = false) String city,
             @RequestParam(name = "sortBy" ,defaultValue = "DEPARTURE_CITY_AND_TIME") SortBy sortBy,
